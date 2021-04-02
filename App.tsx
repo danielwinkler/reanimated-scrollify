@@ -26,33 +26,33 @@ type PlaylistItem = {
   img: string;
 };
 
-const data: PlaylistItem[] = zip(shuffle(artists), shuffle(songs))
+const data = zip(shuffle(artists), shuffle(songs))
   .filter(([l, r]) => !!l && !!r)
-  .map(
-    ([artist, song]) =>
-      ({artist, song, img: 'https://picsum.photos/200'} as PlaylistItem),
-  );
+  .map(([artist, song]) => ({artist, song, img: 'https://picsum.photos/200'} as PlaylistItem));
+
+const RowItem = ({item}: ListRenderItemInfo<PlaylistItem>) => (
+  <View style={{flexDirection: 'row', alignItems: 'center', padding: 8}}>
+    <Image source={{uri: item.img}} style={{height: 64, width: 64}} />
+    <View style={{width: 8}} />
+    <View style={{flex: 1}}>
+      <Text style={{fontWeight: 'bold'}}>{item.artist}</Text>
+      <View style={{height: 8}} />
+      <Text>{item.song}</Text>
+    </View>
+    <View>
+      <FontAwesomeIcon icon={faEllipsisV} />
+    </View>
+  </View>
+);
+
+const Header = () => null;
 
 const App = () => {
   return (
-    <AnimatedList
-      data={data}
-      keyExtractor={(_, index) => index.toString()}
-      renderItem={({item}: ListRenderItemInfo<PlaylistItem>) => (
-        <View style={{flexDirection: 'row', alignItems: 'center', padding: 8}}>
-          <Image source={{uri: item.img}} style={{height: 64, width: 64}} />
-          <View style={{width: 8}} />
-          <View style={{flex: 1}}>
-            <Text style={{fontWeight: 'bold'}}>{item.artist}</Text>
-            <View style={{height: 8}} />
-            <Text>{item.song}</Text>
-          </View>
-          <View>
-            <FontAwesomeIcon icon={faEllipsisV} />
-          </View>
-        </View>
-      )}
-    />
+    <>
+      <Header />
+      <AnimatedList data={data} keyExtractor={(_, index) => index.toString()} renderItem={RowItem} />
+    </>
   );
 };
 
